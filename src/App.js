@@ -3,20 +3,19 @@ import logo from './logo.svg';
 import './App.css';
 import { Link, Route } from 'react-router-dom';
 import GamesPage from './GamesPage'
+import GameForm from './GameForm'
+
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <div className="ui container">
+        <div className="ui three item menu">
+          <Link className="item" activeClassName="active" activeOnlyWhenExact to="/">Home</Link>
+          <Link className="item" activeClassName="active" activeOnlyWhenExact to="/games">Games</Link>
+          <Link className="item" activeClassName="active" activeOnlyWhenExact to="/game/new">Add New Games</Link>
         </div>
-        
-        <p className="App-intro">
-          <Link to="games">Games</Link>
-        </p>
-
         <Route exactly path="/games" component={GamesPage}/>
+        <Route path="/game/new" component={GameForm}/>
       </div>
     );
   }
