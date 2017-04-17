@@ -1,18 +1,23 @@
 import React from 'react';
 import classnames from 'classnames';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-import { saveGame } from './actions';
 
 class GameForm extends React.Component {
   state = {
-    title: '',
-    cover: '',
+    _id: this.props.game ? this.props.game._id : null,    
+    title: this.props.game ? this.props.game.title : '',
+    cover: this.props.game ? this.props.game.cover : '',
     errors: {},
-    loading: false,
-    done: false
+    loading: false
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      _id: nextProps.game._id,
+      title: nextProps.game.title,
+      cover: nextProps.game.cover
+    });
+  }
+  
   handleChange = (e) => {
     if (!!this.state.errors[e.target.name]) {
       let errors = Object.assign({}, this.state.errors);
@@ -37,16 +42,16 @@ class GameForm extends React.Component {
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-      const { title, cover } = this.state;
+      const { _id, title, cover } = this.state;
       this.setState({ loading: true });
-      this.props.saveGame({ title, cover }).then(
-        () => { this.setState({ done: true })},
-        (err) => err.response.json().then(({errors}) => this.setState({ errors, loading: false }))
-      );
+      this.props.saveGame({ _id, title, cover })
+        .catch((err) => err.response.json().then(({errors}) => this.setState({ errors, loading: false })));
     }
   }
 
   render() {
+    console.log('this.props.game: ', this.props);
+    
     const form = (
       <form className={classnames('ui', 'form', { loading: this.state.loading })} onSubmit={this.handleSubmit}>
         <h1>Add new game</h1>
@@ -86,10 +91,10 @@ class GameForm extends React.Component {
     );
     return (
       <div>
-        { this.state.done ? <Redirect to="/games" /> : form }
+        { form }
       </div>
     );
   }
 }
 
-export default connect(null, { saveGame })(GameForm);
+export default GameForm;
