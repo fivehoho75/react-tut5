@@ -50,6 +50,7 @@ export function gameDeleted(gameId) {
 }
 
 export function saveGame(data) {
+  console.log('saveGame action: ', data);
   return dispatch => {
     return fetch('/api/games', {
       method: 'post',

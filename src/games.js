@@ -1,6 +1,9 @@
 import { SET_GAMES, ADD_GAME, GAME_FETCHED, GAME_UPDATED, GAME_DELETED } from './actions'
 
-export default function games (state = [], action = []) {
+export default function games (state = [], action = {}) {
+
+    console.log('state: ', state);
+    console.log('action: ', action);
     switch(action.type) {
         case ADD_GAME: return [
             ...state,
